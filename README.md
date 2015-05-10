@@ -10,12 +10,23 @@ Search torrents in t411 api
 
 ### Authentication
 
-`$authConfig = new AuthConfig('username', 'password');`
+```
+$authConfig = new AuthConfig('username', 'password');`
+...
+$authentication = new Authentication();
+$tokenConfig = $authentication->auth($authConfig);
+```
 
-`$authentication = new Authentication();
-$tokenConfig = $authentication->auth($authConfig);`
+### Search Torrents
 
-### Torrents
+```
+$repository = new TorrentRepository($tokenConfig);
+$torrents = $repository->search('Ubuntu');
+```
 
-`$repository = new TorrentRepository($tokenConfig);
- $torrents = $repository->search('Ubuntu');`
+### Download torrent
+
+```
+$downloader = new TorrentDownloader($tokenConfig);
+$file = $downloader->download($torrents[0]);
+```

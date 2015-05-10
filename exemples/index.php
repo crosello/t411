@@ -4,6 +4,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Rosello\T411\Authentication\Authentication;
 use Rosello\T411\Config\AuthConfig;
+use Rosello\T411\Downloader\TorrentDownloader;
 use Rosello\T411\Repository\TorrentRepository;
 
 //Create auth config object
@@ -17,5 +18,7 @@ $tokenConfig = $authentication->auth($authConfig);
 $repository = new TorrentRepository($tokenConfig);
 $torrents = $repository->search('Ubuntu');
 
-var_dump($torrents);
+//Download first torrent
+$downloader = new TorrentDownloader($tokenConfig);
+$file = $downloader->download($torrents[0]);
 

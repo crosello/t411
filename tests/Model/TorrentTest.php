@@ -2,6 +2,10 @@
 
 namespace Rosello\T411\Model;
 
+/**
+ * Class TorrentTest
+ * @package Rosello\T411\Model
+ */
 class TorrentTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -42,5 +46,15 @@ class TorrentTest extends \PHPUnit_Framework_TestCase
     public function testShouldGetIfVerified()
     {
         $this->assertTrue($this->torrent->isVerified());
+    }
+
+    public function testShouldGetSize()
+    {
+        $this->assertSame(1181818, $this->torrent->getSize());
+    }
+
+    public function testShouldGetCategory()
+    {
+        $this->assertSame(38, $this->torrent->getCategory());
     }
 }
