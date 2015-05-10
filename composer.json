@@ -1,0 +1,21 @@
+{
+  "name": "crosello/t411",
+  "type": "library",
+  "description": "T411 API Client",
+  "autoload": {
+    "psr-4": {
+      "Rosello\\T411\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Rosello\\T411\\": "tests/"
+    }
+  },
+  "require": {
+    "guzzlehttp/guzzle": "^5.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.6"
+  }
+}
