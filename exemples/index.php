@@ -15,7 +15,8 @@ $authentication = new Authentication();
 $tokenConfig = $authentication->auth($authConfig);
 
 //Search torrents
-$repository = new TorrentRepository($tokenConfig);
+$limit = 10;
+$repository = new TorrentRepository($tokenConfig, $limit);
 $torrents = $repository->search('Ubuntu');
 
 //Download first torrent

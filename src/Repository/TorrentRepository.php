@@ -36,10 +36,16 @@ class TorrentRepository
     private $torrentFactory;
 
     /**
+     * @var integer
+     */
+    private $limit;
+
+    /**
      * @param TokenConfig $tokenConfig
+     * @param int $limit
      * @param ClientInterface $client
      */
-    public function __construct(TokenConfig $tokenConfig, ClientInterface $client = null)
+    public function __construct(TokenConfig $tokenConfig, $limit = 10, ClientInterface $client = null)
     {
         if ($client) {
             $this->client = $client;
@@ -49,6 +55,9 @@ class TorrentRepository
 
         $this->config = $tokenConfig;
         $this->torrentFactory = new TorrentFactory();
+        $this->limit = $limit;
+
+        $this->guardAgainstInvalidLimit($limit);
     }
 
     /**
@@ -57,20 +66,36 @@ class TorrentRepository
      */
     public function search($search)
     {
-        $response = $this->client->post($this->config->getBaseUrl() . "/torrents/search/{$search}", array(
-            'headers' => array(
-                "Authorization" => $this->config->getToken()
+        $response = $this->client->post(
+            $this->config->getBaseUrl() . "/torrents/search/{$search}?limit={$this->limit}",
+            array(
+                'headers' => array(
+                    "Authorization" => $this->config->getToken()
+                )
             )
-        ));
+        );
         $data = $response->json();
 
         $rows = $data['torrents'];
         $torrents = array();
 
         foreach ($rows as $row) {
-            $torrents[] = $this->torrentFactory->create($row);
+            if (is_array($row)) {
+                $torrents[] = $this->torrentFactory->create($row);
+            }
         }
 
         return $torrents;
+    }
+
+    /**
+     * @param $limit
+     * @throws \InvalidArgumentException
+     */
+    private function guardAgainstInvalidLimit($limit)
+    {
+        if (!is_numeric($limit)) {
+            throw new \InvalidArgumentException("You must provide a numeric a value for limit");
+        }
     }
 }

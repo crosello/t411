@@ -26,7 +26,7 @@ class TorrentRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->client = $this->getMock('GuzzleHttp\ClientInterface');
         $this->config = new TokenConfig('token');
-        $this->repository = new TorrentRepository($this->config, $this->client);
+        $this->repository = new TorrentRepository($this->config, 2, $this->client);
     }
 
     public function testShouldSearchTorrents()
@@ -85,7 +85,7 @@ class TorrentRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('post')
             ->with(
-                $this->config->getBaseUrl() . '/torrents/search/Ubuntu',
+                $this->config->getBaseUrl() . '/torrents/search/Ubuntu?limit=2',
                 array(
                     'headers' => array(
                         'Authorization' => 'token'
@@ -97,5 +97,13 @@ class TorrentRepositoryTest extends \PHPUnit_Framework_TestCase
         $torrents = $this->repository->search('Ubuntu');
 
         $this->assertCount(2, $torrents);
+    }
+
+    /**
+     * @expectedException        \InvalidArgumentException
+     */
+    public function testShouldThrowExceptionIfProviderANotNumericValueForLimit()
+    {
+        new TorrentRepository($this->config, 'not_numeric');
     }
 }
