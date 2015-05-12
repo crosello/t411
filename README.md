@@ -20,7 +20,8 @@ $tokenConfig = $authentication->auth($authConfig);
 ### Search Torrents
 
 ```
-$repository = new TorrentRepository($tokenConfig);
+$limit = 10;
+$repository = new TorrentRepository($tokenConfig, $limit);
 $torrents = $repository->search('Ubuntu');
 ```
 
